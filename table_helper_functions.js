@@ -88,19 +88,23 @@ function get_random_table_from(table_name) {
     var raw_table = document.getElementById(table_name);
     //console.log(raw_table);
     var ret = {};
-    for (var i = 0; i < raw_table.rows.length; i++) {
+    var temp = values_from_row(raw_table.rows[0]);
+    ret["select_dice"] = temp[0];
+    ret["description_string"] = temp[1];
+    ret["entries"] = {};
+    for (var i = 1; i < raw_table.rows.length; i++) {
         //console.log(i, values_from_row(raw_table.rows[i]));
         var temp = values_from_row(raw_table.rows[i]);
         var text = temp[1].replace(/\n/g, "");
         text = text.replace(/\t/g, "");
-        ret[i] = { "text": text, "probability": create_set_of_numbers(temp[0]) }
+        ret["entries"][i] = { "text": text, "probability": create_set_of_numbers(temp[0]) }
     }
     return ret;
 }
 
-function get_entry_from_random_table(number_rolled, table_name) {
+function get_entry_from_random_table(number_rolled, table) {
     var ret = {};
-    Object.values(table_name).forEach(
+    Object.values(table["entries"]).forEach(
         e => {
             var prob = e.probability;
             if (prob.has(number_rolled))
@@ -108,4 +112,12 @@ function get_entry_from_random_table(number_rolled, table_name) {
         }
     );
     return ret;
+}
+
+function resolve_table(table_name, display_name) {
+    var tab = get_random_table_from(table_name);
+    var dice = create_dice_from_string(tab["select_dice"]);
+    var display = document.getElementById(display_name);
+    var result = get_entry_from_random_table(dice.evaluate(), tab);
+    display.innerHTML = tab["description_string"] + " " + result.text + ".";
 }
