@@ -1,5 +1,5 @@
 function roll_d(nr) {
-    return Math.floor((Math.random() * nr) + 1);
+    return Math.floor((Math.random() * nr) + 1) || 1;
 }
 
 class DiceRoll {
@@ -18,8 +18,34 @@ class DiceRoll {
         return ret;
     }
 }
-DiceRoll.prototype.toString = function () {
+    DiceRoll.prototype.toString = function () {
     return String(this.evaluate());
+}
+
+function create_dice_from_string(dice_string) {
+    var amount = 1;
+    var type = 0;
+    var modifier = 0;
+    var first = dice_string;
+    var split_string = "d";
+    if (dice_string.includes("+")) {
+        modifier = Number(dice_string.split("+")[1]);
+        first = dice_string.split("+")[0];
+    }
+    if (dice_string.includes("-")) {
+        modifier = Number(dice_string.split("-")[1]);
+        first = dice_string.split("-")[0];
+    }
+    if (first.includes("W")) { split_string = "W"; }
+    if (first.includes("w")) { split_string = "w"; }
+    var tmp = first.split(split_string);
+    if (tmp[0] != "") amount = Number(tmp[0]);
+    type = Number(tmp[1]);
+    return new DiceRoll(amount, type, modifier);
+}
+
+function roll_dices() {
+    document.getElementsByName("roll").forEach(r => r.innerHTML = create_dice_from_string(r.title).evaluate());
 }
 
 class LazyString {

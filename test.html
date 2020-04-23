@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="table_helper_functions.js"></script>
+</head>
+
+<body>
+    <input type="button" value="roll_dices" onclick="roll_dices()"><br>
+    Würfel 1W6: <b name="roll" title="1W6+0"></b><br>
+    Würfel 1W6: <b name="roll" title="1W6-0"></b><br>
+    Würfel 1W6: <b name="roll" title="1d6+0"></b><br>
+    Würfel 1W6: <b name="roll" title="1d6-0"></b><br>
+    Würfel 1W6: <b name="roll" title="1W6"></b><br>
+
+    Würfel 2W6: <b name="roll" title="2W6+0"></b><br>
+    Würfel 2W6: <b name="roll" title="2W6-0"></b><br>
+    Würfel 2W6: <b name="roll" title="2d6+0"></b><br>
+    Würfel 2W6: <b name="roll" title="2d6-0"></b><br>
+    Würfel 2W6: <b name="roll" title="2W6"></b><br>
+
+    Würfel 2W6+1: <b name="roll" title="2W6+1"></b><br>
+    Würfel 2W6-1: <b name="roll" title="2W6-1"></b><br>
+    Würfel 2W6+1: <b name="roll" title="2d6+1"></b><br>
+    Würfel 2W6-1: <b name="roll" title="2d6-1"></b><br>
+    Würfel 2W6: <b name="roll" title="2W6"></b><br>
+
+    <script>
+        document.getElementsByName("roll").forEach(r => r.innerHTML = create_dice_from_string(r.title).evaluate());
+    </script>
+
+</body>
+
+</html>
