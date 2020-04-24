@@ -22,6 +22,27 @@ class DiceRoll {
     return String(this.evaluate());
 }
 
+class BoxOfDice {
+    constructor() {
+        this.dice = new Array();
+    }
+    evaluate() {
+        var ret = 0;
+        this.dice.forEach(d => ret += d.evaluate());
+        return ret;
+    }
+    add(die) {
+        this.dice.push(die);
+    }
+}
+
+function create_box_of_dice_from_string(dice_string) {
+    var ret = new BoxOfDice();
+    var temp = dice_string.split(" + ");
+    temp.forEach(die_string => ret.add(create_dice_from_string(die_string)));
+    return ret;
+}
+
 function create_dice_from_string(dice_string) {
     var amount = 1;
     var type = 0;
@@ -116,7 +137,7 @@ function get_entry_from_random_table(number_rolled, table) {
 
 function resolve_table(table_name, display_name) {
     var tab = get_random_table_from(table_name);
-    var dice = create_dice_from_string(tab["select_dice"]);
+    var dice = create_box_of_dice_from_string(tab["select_dice"]);
     var display = document.getElementById(display_name);
     var result = get_entry_from_random_table(dice.evaluate(), tab);
     display.innerHTML = tab["description_string"] + " " + result.text + ".";
