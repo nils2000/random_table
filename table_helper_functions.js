@@ -82,13 +82,13 @@ class LazyString {
     }
 }
 
-function value_from_cell(cell_containing_only_text) {
-    return cell_containing_only_text.childNodes[0].nodeValue;
-}
+//function value_from_cell(cell_containing_only_text) {
+//    return cell_containing_only_text.childNodes[0].nodeValue;
+//}
 
-function values_from_row(two_cell_row) {
-    return [value_from_cell(two_cell_row.children[0]), value_from_cell(two_cell_row.children[1])];
-}
+//function values_from_row(two_cell_row) {
+// return [value_from_cell(two_cell_row.children[0]), value_from_cell(two_cell_row.children[1])];
+//}
 
 function create_set_of_numbers(num_or_range) {
     //input should either be  a number or a range like "1-25"
@@ -109,16 +109,18 @@ function get_random_table_from(table_name) {
     var raw_table = document.getElementById(table_name);
     //console.log(raw_table);
     var ret = {};
-    var temp = values_from_row(raw_table.rows[0]);
-    ret["select_dice"] = temp[0];
-    ret["description_string"] = temp[1];
+    //var temp = values_from_row(raw_table.rows[0]);
+    ret["select_dice"] = raw_table.rows[0].cells[0].innerHTML;
+    ret["description_string"] = raw_table.rows[0].cells[1].innerHTML;
     ret["entries"] = {};
     for (var i = 1; i < raw_table.rows.length; i++) {
         //console.log(i, values_from_row(raw_table.rows[i]));
-        var temp = values_from_row(raw_table.rows[i]);
-        var text = temp[1].replace(/\n/g, "");
-        text = text.replace(/\t/g, "");
-        ret["entries"][i] = { "text": text, "probability": create_set_of_numbers(temp[0]) }
+        var temp_range = raw_table.rows[i].cells[0].innerHTML;
+        var temp_desc = raw_table.rows[i].cells[1].innerHTML;
+        //var temp = values_from_row(raw_table.rows[i]);
+        //var text = temp[1].replace(/\n/g, "");
+        //text = text.replace(/\t/g, "");
+        ret["entries"][i] = { "text": temp_desc, "probability": create_set_of_numbers(temp_range) }
     }
     return ret;
 }
